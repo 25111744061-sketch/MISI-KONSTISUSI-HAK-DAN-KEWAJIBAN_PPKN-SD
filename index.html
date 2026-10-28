@@ -42,21 +42,17 @@ h2{margin:6px 0;font-size:clamp(22px,4.5vw,32px)}
 .card.ok::after{content:"✅";position:absolute;right:10px;top:8px;font-size:24px}
 .card.bad{border-color:#ff8fa3;background:var(--badbg);cursor:default;transform:none}
 .card.bad::after{content:"❌";position:absolute;right:10px;top:8px;font-size:24px}
-.card.pop{animation:pop .6s}
 .card .pb{position:absolute;right:-8px;top:-10px;min-width:30px;height:30px;border-radius:50%;color:#fff;font-weight:900;display:grid;place-items:center;border:3px solid #fff}
-@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-@keyframes pop{40%{transform:scale(1.08)}}
-@keyframes fly{to{transform:translateY(-34px);opacity:0}}
-@keyframes spin{from{transform:scale(0) rotate(-90deg)}to{transform:scale(1) rotate(0)}}
-.big{font-size:60px;display:inline-block;animation:spin .7s}
 ol.rules{padding-left:26px;font-weight:700}ol.rules li{margin:6px 0}
 .acts{display:flex;flex-wrap:wrap;justify-content:center;margin-top:8px}
 .lv{display:flex;justify-content:space-between;gap:8px;border-bottom:2px dashed var(--bd);padding:6px 0;font-weight:700}
-textarea{width:100%;font:inherit;border:3px solid var(--bd);border-radius:16px;padding:10px;background:var(--card);color:var(--tx);min-height:80px}
+textarea, input[type="text"]{width:100%;font:inherit;border:3px solid var(--bd);border-radius:16px;padding:10px;background:var(--card);color:var(--tx)}
+textarea{min-height:80px}
 .info{display:flex;gap:12px;align-items:flex-start}.info .ic{font-size:44px}
 .done{background:var(--okbg);border-color:var(--grn)}
 .mode{display:flex;justify-content:center;flex-wrap:wrap}
 .mode .btn.on{background:var(--grn);color:#fff;border-color:var(--grn)}
+.badge-grp{background:var(--yel);color:#3a2b00;padding:4px 12px;border-radius:12px;font-size:14px;font-weight:800;display:inline-block;margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -81,7 +77,13 @@ const $=document.getElementById("app");
 let AC=null,MUTE=false;
 const LINK_KUMPUL="";
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-function hasil(){const n=(S.name||"").trim()||"(tanpa nama)";return "Hasil Misi Konstitusi\nNama: "+n+"\nSkor: "+score()+"/250\nBintang: "+stars()+"/5\n"+D.map((d,i)=>"Level "+(i+1)+": "+S.scores[i]*10+"/50").join("\n")+"\nRefleksi: "+(S.reflect||"-")}
+
+function hasil(){
+ const n=(S.name||"").trim()||"(tanpa nama)";
+ const grpInfo=S.mode==="grp"?`\nMode: Kelompok (${S.grpName||"Tanpa Nama Kelompok"})\nAnggota: ${S.grpMembers||"-"}`:`\nMode: Individu`;
+ return "Hasil Misi Konstitusi\nNama: "+n+grpInfo+"\nSkor: "+score()+"/250\nBintang: "+stars()+"/5\n"+D.map((d,i)=>"Level "+(i+1)+": "+S.scores[i]*10+"/50").join("\n")+"\nRefleksi: "+(S.reflect||"-")
+}
+
 function softR(){const y=scrollY;$.innerHTML=result();scrollTo(0,y)}
 function tone(f,t,d,type,v){const c=AC,o=c.createOscillator(),g=c.createGain(),s=c.currentTime+t;o.type=type||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.2,s+.02);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.05)}
 function sfx(k){if(MUTE)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
@@ -89,17 +91,27 @@ const N={tick:[[600,0,.07,"triangle",.1]],ok:[[659,0,.15],[880,.12,.15],[1175,.2
 N[k].forEach(a=>tone(a[0],a[1],a[2],a[3],a[4]))}catch(e){}}
 
 let S;
-function init(keepMode){S={page:"home",mode:keepMode||"ind",lvl:0,scores:[0,0,0,0,0],reviewed:[false,false,false,false,false],order:[0,1,2,3,4],pairs:{},sel:null,msg:"",kind:"",results:[],reflect:"",from:"home"}}
+function init(keepMode){
+ S={page:"home",mode:keepMode||"ind",lvl:0,scores:[0,0,0,0,0],reviewed:[false,false,false,false,false],order:[0,1,2,3,4],pairs:{},sel:null,msg:"",kind:"",results:[],reflect:"",grpName:"",grpMembers:"",name:""}
+}
+
 function shuf(){let a;do{a=[0,1,2,3,4];for(let i=4;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}while(a.every((v,i)=>v===i));return a}
 const score=()=>S.scores.reduce((a,b)=>a+b*10,0);
 const stars=()=>S.scores.filter(s=>s===5).length;
-const solved=()=>S.scores.reduce((a,b)=>a+b,0);
 const free=()=>{for(let q=0;q<5;q++)if(!(q in S.pairs))return q;return null};
 
 function startLevel(l){
- S.lvl=l;S.order=shuf();S.pairs={};S.sel=0;S.results=[];
- S.msg="Pasangkan semua 5 kartu soal di bawah ini dengan kartu jawaban yang sesuai!";
- S.kind="";S.page="game";
+ S.lvl=l;
+ S.reviewed[l]=false; // FIX RESET AKSI KLIK PADA ULANGI LEVEL
+ S.order=shuf();
+ S.pairs={};
+ S.sel=0;
+ S.results=[];
+ S.msg=S.mode==="grp"
+  ?"[MODE KELOMPOK] Diskusikan dengan teman kelompokmu, lalu pasangkan 5 kartu di bawah ini!"
+  :"Pasangkan 5 kartu soal di sebelah kiri dengan kartu jawaban di sebelah kanan!";
+ S.kind="";
+ S.page="game";
 }
 
 function checkAll(){
@@ -121,7 +133,7 @@ function checkAll(){
   S.msg="Luar biasa! Semua jawabanmu di level ini benar! (Skor: 50/50)";
  }else{
   sfx(correctCount>0?"ok":"no");S.kind=correctCount>3?"ok":"bad";
-  S.msg=`Kamu menjawab ${correctCount} dari 5 soal dengan benar! (Skor: ${correctCount*10}/50). Perhatikan kartu yang berwarna hijau/merah.`;
+  S.msg=`Hasil evaluasi: ${correctCount} dari 5 soal benar! (Skor: ${correctCount*10}/50). Kamu bisa lanjut atau mengulangi level ini.`;
  }
 }
 
@@ -130,7 +142,7 @@ function pickA(a){if(S.reviewed[S.lvl])return;
  if(S.sel==null){S.msg="Pilih kartu soal dulu di sebelah kiri, baru pilih jawabannya.";S.kind="";return}
  for(const k in S.pairs)if(S.pairs[k]===a)delete S.pairs[k];
  S.pairs[S.sel]=a;S.sel=free();
- S.msg=S.sel==null?"Semua 5 kartu sudah dipasangkan! Tekan tombol '✔ Periksa Jawaban' di bawah.":"Bagus! Lanjutkan memasangkan kartu berikutnya.";S.kind=""}
+ S.msg=S.sel==null?"Semua 5 kartu sudah dipasangkan! Tekan tombol '✔ Periksa Jawaban'." :"Bagus! Lanjutkan memasangkan kartu berikutnya.";S.kind=""}
 
 const stat=()=>`<div class="stats"><span class="chip">🎯 Level ${S.lvl+1}/5</span><span class="chip">🏅 Skor Total: ${score()}</span><span class="chip">${"⭐".repeat(stars())||"☆"} ${stars()}/5</span></div><div class="bar"><i style="width:${(S.lvl+(S.reviewed[S.lvl]?1:0))/5*100}%"></i></div>`;
 const guide=(m,k)=>`<div class="guide"><div class="ava">🧑‍🎓</div><div class="bub ${k||""}"><b>Kak Konsti:</b> ${m}</div></div>`;
@@ -140,8 +152,28 @@ function home(){return `<div class="c"><div class="hero">🇮🇩📖🛡️⭐<
 <div class="panel"><b>5 Level • 25 Tantangan • Maksimal 250 Poin</b></div>
 <div class="acts"><button class="btn g" data-act="go" data-p="rules">▶ MULAI BERMAIN</button><button class="btn y" data-act="go" data-p="rules">❓ CARA BERMAIN</button></div></div>`}
 
-function rules(){return `<div class="panel"><h2 class="c">📋 Cara Bermain</h2><ol class="rules"><li>Pilih kartu soal di sebelah kiri, lalu pilih pasangan kartu jawabannya di sebelah kanan.</li><li>Pasangkan **semua 5 kartu** di setiap level.</li><li>Tekan tombol **“✔ Periksa Jawaban”** untuk melihat hasil nilai dan evaluasimu.</li><li>Kartu berwarna **Hijau (✅)** artinya benar, dan **Merah (❌)** artinya belum tepat.</li><li>Setiap jawaban benar bernilai 10 poin (Maksimal 50 poin per level).</li><li>Kamu bisa lanjut ke level berikutnya atau mengulang level jika ingin memperbaiki nilai!</li></ol>
-<div class="c"><b>Pilih mode bermain:</b></div><div class="mode"><button class="btn w ${S.mode==="ind"?"on":""}" data-act="mode" data-m="ind">🧍 Individu</button><button class="btn w ${S.mode==="grp"?"on":""}" data-act="mode" data-m="grp">👥 Kelompok</button></div>
+function rules(){return `<div class="panel"><h2 class="c">📋 Cara Bermain</h2>
+<ol class="rules">
+<li>Pilih mode bermain di bawah ini (Individu / Kelompok).</li>
+<li>Pilih kartu soal di sebelah kiri, lalu pilih pasangan kartu jawabannya di sebelah kanan.</li>
+<li>Pasangkan **semua 5 kartu** di setiap level.</li>
+<li>Tekan tombol **“✔ Periksa Jawaban”** untuk melihat evaluasi skor.</li>
+<li>Setiap jawaban benar bernilai 10 poin (Maksimal 50 poin per level).</li>
+</ol>
+<div class="c" style="margin-top:14px"><b>Pilih Mode Bermain:</b></div>
+<div class="mode">
+<button class="btn w ${S.mode==="ind"?"on":""}" data-act="mode" data-m="ind">🧍 Mode Individu</button>
+<button class="btn w ${S.mode==="grp"?"on":""}" data-act="mode" data-m="grp">👥 Mode Kelompok</button>
+</div>
+${S.mode==="grp"?`
+<div class="panel" style="background:var(--selbg);border-color:var(--yel);margin-top:12px;text-align:left">
+<span class="badge-grp">👥 PENGATURAN KELOMPOK</span>
+<p style="margin:4px 0"><b>Nama Kelompok:</b></p>
+<input type="text" id="gname" value="${esc(S.grpName)}" placeholder="Contoh: Kelompok Garuda 1">
+<p style="margin:8px 0 4px"><b>Nama Anggota Kelompok:</b></p>
+<input type="text" id="gmem" value="${esc(S.grpMembers)}" placeholder="Contoh: Andi, Budi, Citra, Doni">
+<p style="font-size:15px;margin-top:6px;color:var(--mut)">💡 <i>Dalam mode kelompok, setiap pilihan kartu harus didiskusikan bersama seluruh anggota kelompok!</i></p>
+</div>`:""}
 <div class="acts"><button class="btn w" data-act="go" data-p="home">⬅ Kembali</button><button class="btn r" data-act="start">🚀 MULAI MISI 1</button></div></div>`}
 
 function game(){
@@ -160,7 +192,7 @@ function game(){
   return `<button class="card ${cls}" data-act="a" data-i="${a}" ${isRev?"disabled":""} style="${pq!=null&&!isRev?"border-color:"+COL[pq]:""}">${pq!=null?`<span class="pb" style="background:${COL[pq]}">${pq+1}</span>`:""}<span>${d.it[a][2]}</span></button>`
  }).join("");
 
- return `<div class="banner"><span>Level ${L+1}: ${d.t}</span><span>${d.env}</span></div>${stat()}
+ return `<div class="banner"><span>Level ${L+1}: ${d.t}</span><span>${S.mode==="grp"?"👥 "+(S.grpName||"Kelompok"):d.env}</span></div>${stat()}
 ${guide(S.msg,S.kind)}
 <div class="grid"><div class="col"><h3>❓ Kartu Soal</h3>${qs}</div><div class="col"><h3>💡 Kartu Jawaban</h3>${as}</div></div>
 ${isRev?`<div class="panel done c"><h2>Nilai Level ${L+1}: ${S.scores[L]*10} / 50</h2><p><b>${d.e}</b></p></div>`:""}
@@ -176,10 +208,12 @@ function result(){
  return `<div class="c"><div class="hero">🎉🧑‍🎓👧🏽👦🏻👧🏿🎉</div><h1>MISI SELESAI!</h1>${guide("Selamat! Kamu sudah menyelesaikan seluruh misi dengan luar biasa!","ok")}
 <div class="panel"><div class="stats"><span class="chip">🏅 Skor Total: ${p} / 250</span><span class="chip">⭐ Bintang: ${stars()} / 5</span></div>
 <h2 class="c" style="margin-top:12px">🏆 ${cat}</h2>
-${D.map((d,i)=>`<div class="lv"><span>Level ${i+1}: ${d.t}</span><span>${S.scores[i]*10}/50 Poin ${S.scores[i]===5?"⭐":"☆"}</span></div>`).join("")}</div>
-<div class="panel" style="text-align:left"><h2>📝 Ringkasan Materi</h2><ol class="rules">${RING.map(r=>`<li>${r}</li>`).join("")}</ol>
+${D.map((d,i)=>`<div class="lv"><span>Level ${i+1}: ${d.t}</span><span>${S.scores[i]*10}/50 Poin ${S.scores[i]===5?"⭐":"☆"}</span></div>`).join("")}</div> <div class="panel" style="text-align:left"><h2>📝 Ringkasan Materi</h2><ol class="rules">${RING.map(r=>`<li>${r}</li>`).join("")}</ol>
 <h3>💭 Refleksi</h3><p><b>Apa satu tindakan bertanggung jawab yang akan kamu lakukan mulai hari ini?</b></p><textarea id="ref" placeholder="Tulis jawabanmu di sini...">${S.reflect}</textarea></div>
-<div class="panel"><h2>📤 Kumpulkan Hasil</h2><p>Tulis namamu, lalu salin hasilnya untuk dikirimkan ke guru.</p><input id="nm" value="${esc(S.name||"")}" placeholder="Nama kamu" style="width:100%;font:inherit;border:3px solid var(--bd);border-radius:16px;padding:10px;background:var(--card);color:var(--tx)"><div class="acts"><button class="btn y" data-act="copy">📋 Salin Hasil</button>${LINK_KUMPUL?`<a class="btn g" href="${LINK_KUMPUL}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📨 Kirim ke Guru</a>`:""}</div>${S.out?`<p><b>Hasil siap! Jika belum tersalin otomatis, tekan teks di bawah lalu salin.</b></p><textarea readonly onclick="this.select()" style="min-height:170px">${esc(S.out)}</textarea>`:""}</div>
+<div class="panel"><h2>📤 Kumpulkan Hasil</h2><p>Tulis namamu (atau perwakilan kelompok), lalu salin hasilnya untuk dikirimkan ke guru.</p>
+<input type="text" id="nm" value="${esc(S.name||"")}" placeholder="Nama Siswa / Perwakilan Kelompok">
+<div class="acts"><button class="btn y" data-act="copy">📋 Salin Hasil</button>${LINK_KUMPUL?`<a class="btn g" href="${LINK_KUMPUL}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📨 Kirim ke Guru</a>`:""}</div>
+${S.out?`<p><b>Hasil siap! Jika belum tersalin otomatis, tekan teks di bawah lalu salin.</b></p><textarea readonly onclick="this.select()" style="min-height:170px">${esc(S.out)}</textarea>`:""}</div>
 <div class="acts"><button class="btn r" data-act="again">🔁 Main Lagi Dari Awal</button><button class="btn y" data-act="mat">📚 Pelajari Materi</button></div></div>`}
 
 function materi(){return `<div class="c"><h1 style="font-size:clamp(28px,6vw,44px)">📚 Pelajari Materi</h1></div>${MAT.map(m=>`<div class="panel info"><div class="ic">${m[0]}</div><div><h3 style="margin:0">${m[1]}</h3><p style="margin:4px 0 0">${m[2]}</p></div></div>`).join("")}
@@ -198,15 +232,9 @@ $.addEventListener("click",e=>{
   case"q":sfx("tick");pickQ(i);soft();break;
   case"a":sfx("tick");pickA(i);soft();break;
   case"check":checkAll();soft();break;
-  case"retry":startLevel(S.lvl);render();break;
+  case"retry":startLevel(S.lvl);render();break; // MEMANGCIL STARTLEVEL DENGAN RESET STATUS REVIEWED
   case"next":if(S.lvl<4){startLevel(S.lvl+1);render()}break;
   case"result":S.page="result";render();break;
   case"copy":S.out=hasil();try{navigator.clipboard.writeText(S.out)}catch(x){}softR();break;
   case"mat":S.page="materi";render();break;
-  case"again":init(S.mode);S.page="rules";render();break;
- }});
-$.addEventListener("input",e=>{if(e.target.id==="ref")S.reflect=e.target.value;if(e.target.id==="nm")S.name=e.target.value});
-init();render();
-</script>
-</body>
-</html>
+  case"again":init(S.mode);S.page="rules";render();
