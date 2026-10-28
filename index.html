@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- META TAG ANTI-CACHE AGAR TAMPILAN GITHUB PAGES LANGSUNG BERUBAH -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Misi Konstitusi: Pasangkan Hak dan Kewajibanku!</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
@@ -52,6 +56,7 @@ textarea{min-height:80px}
 .done{background:var(--okbg);border-color:var(--grn)}
 .mode{display:flex;justify-content:center;flex-wrap:wrap}
 .mode .btn.on{background:var(--grn);color:#fff;border-color:var(--grn)}
+.ver-badge{background:var(--grn);color:#fff;font-size:13px;font-weight:900;padding:3px 10px;border-radius:99px;display:inline-block;margin-bottom:8px}
 .badge-grp{background:var(--yel);color:#3a2b00;padding:4px 12px;border-radius:12px;font-size:14px;font-weight:800;display:inline-block;margin-bottom:6px}
 </style>
 </head>
@@ -62,14 +67,14 @@ const COL=["#d62839","#1e6fd9","#1fa75a","#8e44ad","#e67e22"];
 const D=[
 {t:"KENALI KONSTITUSI!",env:"🏫 Sekolah",e:"Konstitusi adalah aturan dasar dalam penyelenggaraan negara. UUD NRI Tahun 1945 merupakan hukum dasar tertulis Negara Indonesia.",
  it:[["📜","Konstitusi","Aturan dasar yang menjadi pedoman penyelenggaraan negara."],["📖","UUD NRI Tahun 1945","Hukum dasar tertulis Negara Indonesia."],["🇮🇩","Negara Indonesia","Negara yang memiliki aturan dasar dalam kehidupan bernegara."],["⚖️","Fungsi konstitusi","Menjadi pedoman penyelenggaraan negara dan membatasi kekuasaan sesuai aturan."],["🤝","Kehidupan bernegara","Kehidupan bersama sebagai warga negara yang diatur oleh hukum dan aturan yang berlaku."]]},
-{t:"TEMUKAN HAKMU!",env:"🏫 Kelas & Tempat Ibadah",e:"Hak adalah sesuatu yang berhak kita peroleh. Setiap anak memiliki hak yang harus dihormati.",
+{t:"TEMUKAN HAKMU!",env:"🏫 Kelas & Tempat Ibadah",e:"Hak adalah sesuatu yang berhak kita peroleh. Setiap anak memiliki hak yang harus dihati.",
  it:[["🧒📚","Anak mengikuti pembelajaran di sekolah","Hak memperoleh pendidikan."],["🕌⛪","Anak menjalankan ibadah sesuai agama dan kepercayaannya","Hak beragama dan beribadah."],["🧑‍🏫🛡️","Anak memperoleh perlindungan dari kekerasan","Hak atas perlindungan."],["🗣️💬","Anak menyampaikan pendapat dengan sopan","Hak menyampaikan pendapat sesuai ketentuan yang berlaku."],["👧🏽🧒🏻","Anak mendapatkan perlakuan yang sama di sekolah","Hak memperoleh perlakuan yang adil tanpa diskriminasi."]]},
 {t:"APA KEWAJIBANMU?",env:"🌳 Taman & Sekolah",e:"Kewajiban adalah sesuatu yang harus dilakukan. Tanggung jawab berarti melaksanakan tugas dan kewajiban dengan baik.",
  it:[["✏️","Mengikuti pembelajaran","Belajar dengan sungguh-sungguh dan menaati aturan sekolah."],["🚏","Menggunakan fasilitas umum","Menjaga kebersihan dan tidak merusaknya."],["🏫","Berada di lingkungan sekolah","Menaati tata tertib sekolah."],["👫","Hidup bersama orang lain","Menghormati hak orang lain."],["🌿","Mendapatkan hak atas lingkungan yang bersih","Ikut menjaga kebersihan sesuai kemampuan dan aturan yang berlaku."]]},
 {t:"PASANGKAN HAK DAN KEWAJIBAN!",env:"📚 Perpustakaan",e:"Hak dan kewajiban saling berkaitan. Kita perlu menggunakan hak dengan bertanggung jawab.",
  it:[["📚","Hak menggunakan perpustakaan sekolah","Kewajiban menjaga buku dan menaati aturan perpustakaan."],["🪑","Hak belajar dengan nyaman","Tanggung jawab menjaga ketertiban kelas."],["🧹","Hak menikmati lingkungan yang bersih","Tanggung jawab ikut menjaga kebersihan lingkungan."],["🗣️","Hak menyampaikan pendapat","Tanggung jawab menghormati pendapat orang lain."],["⚽","Hak menggunakan fasilitas sekolah","Tanggung jawab menggunakan fasilitas dengan tertib dan menjaganya."]]},
 {t:"PAHLAWAN WARGA NEGARA!",env:"🏘️ Lingkungan Masyarakat",e:"Warga negara yang baik menggunakan haknya dan melaksanakan kewajibannya dengan penuh tanggung jawab.",
- it:[["🗑️","Kamu melihat sampah di halaman sekolah","Membuang sampah pada tempatnya."],["👂","Teman sedang menyampaikan pendapat","Mendengarkan dan menghargainya."],["📕","Kamu meminjam buku perpustakaan","Mengembalikan buku tepat waktu."],["🙋","Kamu mengikuti musyawarah kelas","Menyampaikan pendapat dengan sopan dan menghormati keputusan bersama."],["🚌","Kamu menggunakan fasilitas umum","Menggunakannya dengan tertib dan menjaganya agar tetap baik."]]}
+ it:[["🗑️","Kamu melihat sampah di halaman sekolah","Membuang sampah pada tempatnya."],["👂","Teman sedang menyampaikan pendapat","Mendengarkan dan menghargainya."],["📕","Kamu meminjam buku perpustakaan","Mengembalikan buku tepat waktu."],["🙋","Kamu mengikuti musyawarah kelas","Menampaikan pendapat dengan sopan dan menghormati keputusan bersama."],["🚌","Kamu menggunakan fasilitas umum","Menggunakannya dengan tertib dan menjaganya agar tetap baik."]]}
 ];
 const MAT=[["📜","Apa itu konstitusi?","Konstitusi adalah aturan dasar untuk mengatur negara. Contoh: aturan agar negara dijalankan dengan adil."],["📖","Apa itu UUD NRI Tahun 1945?","UUD NRI Tahun 1945 adalah hukum dasar tertulis Negara Indonesia."],["🎁","Apa itu hak?","Hak adalah sesuatu yang berhak kita peroleh. Contoh: hak belajar di sekolah."],["✅","Apa itu kewajiban?","Kewajiban adalah sesuatu yang harus kita lakukan. Contoh: menaati tata tertib sekolah."],["🦸","Bagaimana cara menjadi warga negara yang bertanggung jawab?","Gunakan hakmu dengan baik, laksanakan kewajibanmu, hormati orang lain, dan pikirkan akibat tindakanmu."]];
 const RING=["Konstitusi merupakan aturan dasar penyelenggaraan negara.","UUD NRI Tahun 1945 adalah hukum dasar tertulis Negara Indonesia.","Hak merupakan sesuatu yang berhak kita peroleh.","Kewajiban merupakan sesuatu yang harus kita lakukan.","Tanggung jawab berarti melaksanakan kewajiban dan mempertimbangkan akibat tindakan kita."];
@@ -81,7 +86,7 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"
 function hasil(){
  const n=(S.name||"").trim()||"(tanpa nama)";
  const grpInfo=S.mode==="grp"?`\nMode: Kelompok (${S.grpName||"Tanpa Nama Kelompok"})\nAnggota: ${S.grpMembers||"-"}`:`\nMode: Individu`;
- return "Hasil Misi Konstitusi\nNama: "+n+grpInfo+"\nSkor: "+score()+"/250\nBintang: "+stars()+"/5\n"+D.map((d,i)=>"Level "+(i+1)+": "+S.scores[i]*10+"/50").join("\n")+"\nRefleksi: "+(S.reflect||"-")
+ return "Hasil Misi Konstitusi\nNama: "+n+grpInfo+"\nSkor Total: "+score()+"/250\nBintang: "+stars()+"/5\n"+D.map((d,i)=>"Level "+(i+1)+": "+S.scores[i]*10+"/50").join("\n")+"\nRefleksi: "+(S.reflect||"-")
 }
 
 function softR(){const y=scrollY;$.innerHTML=result();scrollTo(0,y)}
@@ -102,7 +107,7 @@ const free=()=>{for(let q=0;q<5;q++)if(!(q in S.pairs))return q;return null};
 
 function startLevel(l){
  S.lvl=l;
- S.reviewed[l]=false; // FIX RESET AKSI KLIK PADA ULANGI LEVEL
+ S.reviewed[l]=false; // FITUR UNLOCK KLIK SAAT ULANG LEVEL
  S.order=shuf();
  S.pairs={};
  S.sel=0;
@@ -147,7 +152,9 @@ function pickA(a){if(S.reviewed[S.lvl])return;
 const stat=()=>`<div class="stats"><span class="chip">🎯 Level ${S.lvl+1}/5</span><span class="chip">🏅 Skor Total: ${score()}</span><span class="chip">${"⭐".repeat(stars())||"☆"} ${stars()}/5</span></div><div class="bar"><i style="width:${(S.lvl+(S.reviewed[S.lvl]?1:0))/5*100}%"></i></div>`;
 const guide=(m,k)=>`<div class="guide"><div class="ava">🧑‍🎓</div><div class="bub ${k||""}"><b>Kak Konsti:</b> ${m}</div></div>`;
 
-function home(){return `<div class="c"><div class="hero">🇮🇩📖🛡️⭐</div><h1>MISI KONSTITUSI</h1><h2>Pasangkan Hak dan Kewajibanku!</h2>
+function home(){return `<div class="c">
+<div><span class="ver-badge">✨ VERSI TERBARU (V5.0 ACTIVE)</span></div>
+<div class="hero">🇮🇩📖🛡️⭐</div><h1>MISI KONSTITUSI</h1><h2>Pasangkan Hak dan Kewajibanku!</h2>
 <div class="hero" style="letter-spacing:2px">🧑‍🎓👧🏽👦🏻👧🏿</div>${guide("Ayo, selesaikan misi dan jadilah warga negara yang baik!")}
 <div class="panel"><b>5 Level • 25 Tantangan • Maksimal 250 Poin</b></div>
 <div class="acts"><button class="btn g" data-act="go" data-p="rules">▶ MULAI BERMAIN</button><button class="btn y" data-act="go" data-p="rules">❓ CARA BERMAIN</button></div></div>`}
@@ -167,7 +174,7 @@ function rules(){return `<div class="panel"><h2 class="c">📋 Cara Bermain</h2>
 </div>
 ${S.mode==="grp"?`
 <div class="panel" style="background:var(--selbg);border-color:var(--yel);margin-top:12px;text-align:left">
-<span class="badge-grp">👥 PENGATURAN KELOMPOK</span>
+<span class="badge-grp">👥 FORM KELOMPOK AKTIF</span>
 <p style="margin:4px 0"><b>Nama Kelompok:</b></p>
 <input type="text" id="gname" value="${esc(S.grpName)}" placeholder="Contoh: Kelompok Garuda 1">
 <p style="margin:8px 0 4px"><b>Nama Anggota Kelompok:</b></p>
@@ -208,7 +215,8 @@ function result(){
  return `<div class="c"><div class="hero">🎉🧑‍🎓👧🏽👦🏻👧🏿🎉</div><h1>MISI SELESAI!</h1>${guide("Selamat! Kamu sudah menyelesaikan seluruh misi dengan luar biasa!","ok")}
 <div class="panel"><div class="stats"><span class="chip">🏅 Skor Total: ${p} / 250</span><span class="chip">⭐ Bintang: ${stars()} / 5</span></div>
 <h2 class="c" style="margin-top:12px">🏆 ${cat}</h2>
-${D.map((d,i)=>`<div class="lv"><span>Level ${i+1}: ${d.t}</span><span>${S.scores[i]*10}/50 Poin ${S.scores[i]===5?"⭐":"☆"}</span></div>`).join("")}</div> <div class="panel" style="text-align:left"><h2>📝 Ringkasan Materi</h2><ol class="rules">${RING.map(r=>`<li>${r}</li>`).join("")}</ol>
+${D.map((d,i)=>`<div class="lv"><span>Level ${i+1}: ${d.t}</span><span>${S.scores[i]*10}/50 Poin ${S.scores[i]===5?"⭐":"☆"}</span></div>`).join("")}</div>
+<div class="panel" style="text-align:left"><h2>📝 Ringkasan Materi</h2><ol class="rules">${RING.map(r=>`<li>${r}</li>`).join("")}</ol>
 <h3>💭 Refleksi</h3><p><b>Apa satu tindakan bertanggung jawab yang akan kamu lakukan mulai hari ini?</b></p><textarea id="ref" placeholder="Tulis jawabanmu di sini...">${S.reflect}</textarea></div>
 <div class="panel"><h2>📤 Kumpulkan Hasil</h2><p>Tulis namamu (atau perwakilan kelompok), lalu salin hasilnya untuk dikirimkan ke guru.</p>
 <input type="text" id="nm" value="${esc(S.name||"")}" placeholder="Nama Siswa / Perwakilan Kelompok">
@@ -232,9 +240,22 @@ $.addEventListener("click",e=>{
   case"q":sfx("tick");pickQ(i);soft();break;
   case"a":sfx("tick");pickA(i);soft();break;
   case"check":checkAll();soft();break;
-  case"retry":startLevel(S.lvl);render();break; // MEMANGCIL STARTLEVEL DENGAN RESET STATUS REVIEWED
+  case"retry":startLevel(S.lvl);render();break;
   case"next":if(S.lvl<4){startLevel(S.lvl+1);render()}break;
   case"result":S.page="result";render();break;
   case"copy":S.out=hasil();try{navigator.clipboard.writeText(S.out)}catch(x){}softR();break;
   case"mat":S.page="materi";render();break;
-  case"again":init(S.mode);S.page="rules";render();
+  case"again":init(S.mode);S.page="rules";render();break;
+ }});
+
+$.addEventListener("input",e=>{
+ if(e.target.id==="ref")S.reflect=e.target.value;
+ if(e.target.id==="nm")S.name=e.target.value;
+ if(e.target.id==="gname")S.grpName=e.target.value;
+ if(e.target.id==="gmem")S.grpMembers=e.target.value;
+});
+
+init();render();
+</script>
+</body>
+</html>
