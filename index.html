@@ -40,9 +40,9 @@ h2{margin:6px 0;font-size:clamp(22px,4.5vw,32px)}
 .card.sel{border-color:var(--yel);background:var(--selbg);transform:scale(1.03);box-shadow:0 0 0 5px rgba(255,201,40,.5)}
 .card.ok{border-color:var(--grn);background:var(--okbg);cursor:default;transform:none}
 .card.ok::after{content:"✅";position:absolute;right:10px;top:8px;font-size:24px}
-.card.bad{border-color:#ff8fa3;background:var(--badbg);animation:shake .4s}
+.card.bad{border-color:#ff8fa3;background:var(--badbg);cursor:default;transform:none}
+.card.bad::after{content:"❌";position:absolute;right:10px;top:8px;font-size:24px}
 .card.pop{animation:pop .6s}
-.card.pop::before{content:"⭐";position:absolute;right:12px;top:-6px;font-size:30px;animation:fly 1s forwards}
 .card .pb{position:absolute;right:-8px;top:-10px;min-width:30px;height:30px;border-radius:50%;color:#fff;font-weight:900;display:grid;place-items:center;border:3px solid #fff}
 @keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 @keyframes pop{40%{transform:scale(1.08)}}
@@ -66,93 +66,125 @@ const COL=["#d62839","#1e6fd9","#1fa75a","#8e44ad","#e67e22"];
 const D=[
 {t:"KENALI KONSTITUSI!",env:"🏫 Sekolah",e:"Konstitusi adalah aturan dasar dalam penyelenggaraan negara. UUD NRI Tahun 1945 merupakan hukum dasar tertulis Negara Indonesia.",
  it:[["📜","Konstitusi","Aturan dasar yang menjadi pedoman penyelenggaraan negara."],["📖","UUD NRI Tahun 1945","Hukum dasar tertulis Negara Indonesia."],["🇮🇩","Negara Indonesia","Negara yang memiliki aturan dasar dalam kehidupan bernegara."],["⚖️","Fungsi konstitusi","Menjadi pedoman penyelenggaraan negara dan membatasi kekuasaan sesuai aturan."],["🤝","Kehidupan bernegara","Kehidupan bersama sebagai warga negara yang diatur oleh hukum dan aturan yang berlaku."]]},
-{t:"TEMUKAN HAKMU!",env:"🏫 Kelas & Tempat Ibadah",e:"Hak adalah sesuatu yang berhak kita peroleh. Setiap anak memiliki hak yang harus dihati.",
+{t:"TEMUKAN HAKMU!",env:"🏫 Kelas & Tempat Ibadah",e:"Hak adalah sesuatu yang berhak kita peroleh. Setiap anak memiliki hak yang harus dihormati.",
  it:[["🧒📚","Anak mengikuti pembelajaran di sekolah","Hak memperoleh pendidikan."],["🕌⛪","Anak menjalankan ibadah sesuai agama dan kepercayaannya","Hak beragama dan beribadah."],["🧑‍🏫🛡️","Anak memperoleh perlindungan dari kekerasan","Hak atas perlindungan."],["🗣️💬","Anak menyampaikan pendapat dengan sopan","Hak menyampaikan pendapat sesuai ketentuan yang berlaku."],["👧🏽🧒🏻","Anak mendapatkan perlakuan yang sama di sekolah","Hak memperoleh perlakuan yang adil tanpa diskriminasi."]]},
-{t:"APA KEWAJIBANMU?",env:"🌳 Taman & Sekolah",e:"Kewajiban adalah sesuatu yang harus dilakukan. Tanggung jawab berarti melaksanakan tugas dan kewajiban dengan baik. Ada kewajiban yang diatur dalam hukum, ada pula tanggung jawab sehari-hari di rumah dan sekolah.",
+{t:"APA KEWAJIBANMU?",env:"🌳 Taman & Sekolah",e:"Kewajiban adalah sesuatu yang harus dilakukan. Tanggung jawab berarti melaksanakan tugas dan kewajiban dengan baik.",
  it:[["✏️","Mengikuti pembelajaran","Belajar dengan sungguh-sungguh dan menaati aturan sekolah."],["🚏","Menggunakan fasilitas umum","Menjaga kebersihan dan tidak merusaknya."],["🏫","Berada di lingkungan sekolah","Menaati tata tertib sekolah."],["👫","Hidup bersama orang lain","Menghormati hak orang lain."],["🌿","Mendapatkan hak atas lingkungan yang bersih","Ikut menjaga kebersihan sesuai kemampuan dan aturan yang berlaku."]]},
-{t:"PASANGKAN HAK DAN KEWAJIBAN!",env:"📚 Perpustakaan",e:"Hak dan kewajiban saling berkaitan. Kita perlu menggunakan hak dengan bertanggung jawab dan melaksanakan kewajiban tanpa mengabaikan hak orang lain. Pasangan tadi adalah contoh hubungan dalam kehidupan sehari-hari. Tidak semua hak punya satu kewajiban pasangan secara langsung.",
+{t:"PASANGKAN HAK DAN KEWAJIBAN!",env:"📚 Perpustakaan",e:"Hak dan kewajiban saling berkaitan. Kita perlu menggunakan hak dengan bertanggung jawab.",
  it:[["📚","Hak menggunakan perpustakaan sekolah","Kewajiban menjaga buku dan menaati aturan perpustakaan."],["🪑","Hak belajar dengan nyaman","Tanggung jawab menjaga ketertiban kelas."],["🧹","Hak menikmati lingkungan yang bersih","Tanggung jawab ikut menjaga kebersihan lingkungan."],["🗣️","Hak menyampaikan pendapat","Tanggung jawab menghormati pendapat orang lain."],["⚽","Hak menggunakan fasilitas sekolah","Tanggung jawab menggunakan fasilitas dengan tertib dan menjaganya."]]},
-{t:"PAHLAWAN WARGA NEGARA!",env:"🏘️ Lingkungan Masyarakat",e:"Warga negara yang baik menggunakan haknya, melaksanakan kewajibannya, menghormati orang lain, dan bertanggung jawab atas tindakannya.",
- it:[["🗑️","Kamu melihat sampah di halaman sekolah","Membuang sampah pada tempatnya."],["👂","Teman sedang menyampaikan pendapat","Mendengarkan dan menghargainya."],["📕","Kamu meminjam buku perpustakaan","Mengembalikan buku tepat waktu."],["🙋","Kamu mengikuti musyawarah kelas","Menampaikan pendapat dengan sopan dan menghormati keputusan bersama."],["🚌","Kamu menggunakan fasilitas umum","Menggunakannya dengan tertib dan menjaganya agar tetap baik."]]}
+{t:"PAHLAWAN WARGA NEGARA!",env:"🏘️ Lingkungan Masyarakat",e:"Warga negara yang baik menggunakan haknya dan melaksanakan kewajibannya dengan penuh tanggung jawab.",
+ it:[["🗑️","Kamu melihat sampah di halaman sekolah","Membuang sampah pada tempatnya."],["👂","Teman sedang menyampaikan pendapat","Mendengarkan dan menghargainya."],["📕","Kamu meminjam buku perpustakaan","Mengembalikan buku tepat waktu."],["🙋","Kamu mengikuti musyawarah kelas","Menyampaikan pendapat dengan sopan dan menghormati keputusan bersama."],["🚌","Kamu menggunakan fasilitas umum","Menggunakannya dengan tertib dan menjaganya agar tetap baik."]]}
 ];
 const MAT=[["📜","Apa itu konstitusi?","Konstitusi adalah aturan dasar untuk mengatur negara. Contoh: aturan agar negara dijalankan dengan adil."],["📖","Apa itu UUD NRI Tahun 1945?","UUD NRI Tahun 1945 adalah hukum dasar tertulis Negara Indonesia."],["🎁","Apa itu hak?","Hak adalah sesuatu yang berhak kita peroleh. Contoh: hak belajar di sekolah."],["✅","Apa itu kewajiban?","Kewajiban adalah sesuatu yang harus kita lakukan. Contoh: menaati tata tertib sekolah."],["🦸","Bagaimana cara menjadi warga negara yang bertanggung jawab?","Gunakan hakmu dengan baik, laksanakan kewajibanmu, hormati orang lain, dan pikirkan akibat tindakanmu."]];
 const RING=["Konstitusi merupakan aturan dasar penyelenggaraan negara.","UUD NRI Tahun 1945 adalah hukum dasar tertulis Negara Indonesia.","Hak merupakan sesuatu yang berhak kita peroleh.","Kewajiban merupakan sesuatu yang harus kita lakukan.","Tanggung jawab berarti melaksanakan kewajiban dan mempertimbangkan akibat tindakan kita."];
-const M={ok:"Hebat! Kamu sudah menemukan pasangan yang tepat!",no:"Belum tepat. Yuk, baca kembali situasinya dan coba lagi!",hint:"Ingat, hak adalah sesuatu yang berhak kita peroleh, sedangkan kewajiban adalah sesuatu yang harus kita lakukan.",lv:"Luar biasa! Kamu berhasil menyelesaikan misi ini!",all:"Selamat, Pahlawan Warga Negara! Kamu berhasil menuntaskan seluruh misi!"};
 const $=document.getElementById("app");
 let AC=null,MUTE=false;
 const LINK_KUMPUL="";
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-function hasil(){const n=(S.name||"").trim()||"(tanpa nama)";return "Hasil Misi Konstitusi\nNama: "+n+"\nSkor: "+score()+"/250\nJawaban benar: "+solved()+"/25\nBintang: "+stars()+"/5\n"+D.map((d,i)=>"Level "+(i+1)+": "+S.done[i].length*10+"/50").join("\n")+"\nRefleksi: "+(S.reflect||"-")}
+function hasil(){const n=(S.name||"").trim()||"(tanpa nama)";return "Hasil Misi Konstitusi\nNama: "+n+"\nSkor: "+score()+"/250\nBintang: "+stars()+"/5\n"+D.map((d,i)=>"Level "+(i+1)+": "+S.scores[i]*10+"/50").join("\n")+"\nRefleksi: "+(S.reflect||"-")}
 function softR(){const y=scrollY;$.innerHTML=result();scrollTo(0,y)}
 function tone(f,t,d,type,v){const c=AC,o=c.createOscillator(),g=c.createGain(),s=c.currentTime+t;o.type=type||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.2,s+.02);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.05)}
 function sfx(k){if(MUTE)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
 const N={tick:[[600,0,.07,"triangle",.1]],ok:[[659,0,.15],[880,.12,.15],[1175,.24,.3]],no:[[330,0,.2,"triangle",.18],[262,.18,.3,"triangle",.18]],win:[[523,0,.15],[659,.15,.15],[784,.3,.15],[1047,.45,.5]]};
 N[k].forEach(a=>tone(a[0],a[1],a[2],a[3],a[4]))}catch(e){}}
-let S;
-function init(keepMode){S={page:"home",mode:keepMode||"ind",lvl:0,done:[[],[],[],[],[]],order:[0,1,2,3,4],pairs:{},sel:null,att:0,msg:"",kind:"",bad:{q:[],a:[]},fresh:[],reflect:"",from:"home"}}
-function shuf(){let a;do{a=[0,1,2,3,4];for(let i=4;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}while(a.every((v,i)=>v===i));return a}
-const score=()=>S.done.reduce((s,d)=>s+d.length*10,0);
-const stars=()=>S.done.filter(d=>d.length===5).length;
-const solved=()=>S.done.reduce((s,d)=>s+d.length,0);
-const isDone=q=>S.done[S.lvl].includes(q);
-const free=()=>{for(let q=0;q<5;q++)if(!isDone(q)&&!(q in S.pairs))return q;return null};
-const clr=()=>{S.bad={q:[],a:[]};S.fresh=[]};
-function startLevel(l){S.lvl=l;S.done[l]=[];S.order=shuf();S.pairs={};S.sel=0;S.att=0;clr();S.msg=D[l].t==="KENALI KONSTITUSI!"?"Halo! Aku Kak Konsti. Pilih kartu soal, lalu pilih kartu jawaban yang cocok.":"Misi baru! Pilih kartu soal, lalu kartu jawaban yang cocok.";S.kind="";S.page="game"}
-function check(){
- clr();const L=S.lvl,ks=Object.keys(S.pairs).map(Number).filter(q=>!isDone(q));
- if(!ks.length){S.msg="Pasangkan dulu minimal satu kartu soal dengan kartu jawaban ya!";S.kind="";return}
- const bad=[];
- ks.forEach(q=>{if(S.pairs[q]===q){S.done[L].push(q);S.fresh.push(q)}else{S.bad.q.push(q);S.bad.a.push(S.pairs[q]);bad.push(q)}delete S.pairs[q]});
- if(bad.length){sfx(S.fresh.length?"ok":"no");S.att++;S.msg=(S.fresh.length?"Ada yang sudah tepat! ":"")+M.no+(S.att>=2?" "+M.hint:"");S.kind="bad"}
- else sfx(S.done[L].length===5?"win":"ok"),S.kind="ok",S.msg=S.done[L].length===5?M.lv:M.ok;
- S.sel=free();
-}
-function hint(){
- clr();const un=[0,1,2,3,4].filter(q=>!isDone(q));if(!un.length)return;
- const q=(S.sel!=null&&!isDone(S.sel))?S.sel:un[0];S.sel=q;
- S.msg=`Petunjuk soal ${q+1}: jawabannya diawali “${D[S.lvl].it[q][2].split(" ").slice(0,3).join(" ")} …”. `+(S.att>=2?M.hint:"Baca situasinya pelan-pelan ya!");S.kind=""}
-function pickQ(q){clr();if(isDone(q))return;S.sel=S.sel===q?null:q}
-function pickA(a){clr();if(isDone(a))return;
- if(S.sel==null){S.msg="Pilih kartu soal dulu, lalu pilih kartu jawabannya.";S.kind="";return}
- for(const k in S.pairs)if(S.pairs[k]===a)delete S.pairs[k];
- S.pairs[S.sel]=a;S.sel=free();S.msg=S.sel==null?"Semua kartu sudah dipasangkan. Tekan “Periksa Jawaban”, atau ganti pilihanmu dulu.":"Bagus! Lanjutkan ke kartu soal berikutnya.";S.kind=""}
 
-const stat=()=>`<div class="stats"><span class="chip">🎯 Level ${S.lvl+1}/5</span><span class="chip">🧩 Tantangan ${S.done[S.lvl].length}/5</span><span class="chip">🏅 Skor ${score()}</span><span class="chip">${"⭐".repeat(stars())||"☆"} ${stars()}/5</span></div><div class="bar"><i style="width:${solved()/25*100}%"></i></div>`;
+let S;
+function init(keepMode){S={page:"home",mode:keepMode||"ind",lvl:0,scores:[0,0,0,0,0],reviewed:[false,false,false,false,false],order:[0,1,2,3,4],pairs:{},sel:null,msg:"",kind:"",results:[],reflect:"",from:"home"}}
+function shuf(){let a;do{a=[0,1,2,3,4];for(let i=4;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}while(a.every((v,i)=>v===i));return a}
+const score=()=>S.scores.reduce((a,b)=>a+b*10,0);
+const stars=()=>S.scores.filter(s=>s===5).length;
+const solved=()=>S.scores.reduce((a,b)=>a+b,0);
+const free=()=>{for(let q=0;q<5;q++)if(!(q in S.pairs))return q;return null};
+
+function startLevel(l){
+ S.lvl=l;S.order=shuf();S.pairs={};S.sel=0;S.results=[];
+ S.msg="Pasangkan semua 5 kartu soal di bawah ini dengan kartu jawaban yang sesuai!";
+ S.kind="";S.page="game";
+}
+
+function checkAll(){
+ if(Object.keys(S.pairs).length<5){
+  S.msg="Pasangkan dulu semua 5 kartu soal sebelum memeriksa jawaban ya!";
+  S.kind="bad";sfx("no");return;
+ }
+ let correctCount=0;
+ S.results=[];
+ for(let q=0;q<5;q++){
+  const isRight=S.pairs[q]===q;
+  S.results[q]=isRight;
+  if(isRight) correctCount++;
+ }
+ S.scores[S.lvl]=correctCount;
+ S.reviewed[S.lvl]=true;
+ if(correctCount===5){
+  sfx("win");S.kind="ok";
+  S.msg="Luar biasa! Semua jawabanmu di level ini benar! (Skor: 50/50)";
+ }else{
+  sfx(correctCount>0?"ok":"no");S.kind=correctCount>3?"ok":"bad";
+  S.msg=`Kamu menjawab ${correctCount} dari 5 soal dengan benar! (Skor: ${correctCount*10}/50). Perhatikan kartu yang berwarna hijau/merah.`;
+ }
+}
+
+function pickQ(q){if(S.reviewed[S.lvl])return;S.sel=S.sel===q?null:q}
+function pickA(a){if(S.reviewed[S.lvl])return;
+ if(S.sel==null){S.msg="Pilih kartu soal dulu di sebelah kiri, baru pilih jawabannya.";S.kind="";return}
+ for(const k in S.pairs)if(S.pairs[k]===a)delete S.pairs[k];
+ S.pairs[S.sel]=a;S.sel=free();
+ S.msg=S.sel==null?"Semua 5 kartu sudah dipasangkan! Tekan tombol '✔ Periksa Jawaban' di bawah.":"Bagus! Lanjutkan memasangkan kartu berikutnya.";S.kind=""}
+
+const stat=()=>`<div class="stats"><span class="chip">🎯 Level ${S.lvl+1}/5</span><span class="chip">🏅 Skor Total: ${score()}</span><span class="chip">${"⭐".repeat(stars())||"☆"} ${stars()}/5</span></div><div class="bar"><i style="width:${(S.lvl+(S.reviewed[S.lvl]?1:0))/5*100}%"></i></div>`;
 const guide=(m,k)=>`<div class="guide"><div class="ava">🧑‍🎓</div><div class="bub ${k||""}"><b>Kak Konsti:</b> ${m}</div></div>`;
 
 function home(){return `<div class="c"><div class="hero">🇮🇩📖🛡️⭐</div><h1>MISI KONSTITUSI</h1><h2>Pasangkan Hak dan Kewajibanku!</h2>
 <div class="hero" style="letter-spacing:2px">🧑‍🎓👧🏽👦🏻👧🏿</div>${guide("Ayo, selesaikan misi dan jadilah warga negara yang baik!")}
 <div class="panel"><b>5 Level • 25 Tantangan • Maksimal 250 Poin</b></div>
 <div class="acts"><button class="btn g" data-act="go" data-p="rules">▶ MULAI BERMAIN</button><button class="btn y" data-act="go" data-p="rules">❓ CARA BERMAIN</button></div></div>`}
-function rules(){return `<div class="panel"><h2 class="c">📋 Cara Bermain</h2><ol class="rules"><li>Baca kartu soal dengan teliti.</li><li>Pilih atau pasangkan kartu jawaban yang sesuai.</li><li>Tekan tombol “Periksa Jawaban”.</li><li>Setiap jawaban benar bernilai 10 poin.</li><li>Jawaban salah tidak mengurangi skor dan dapat diperbaiki.</li><li>Selesaikan 5 tantangan untuk mendapatkan 1 bintang pada setiap level.</li><li>Selesaikan seluruh 5 level untuk memperoleh maksimal 250 poin dan 5 bintang.</li></ol>
+
+function rules(){return `<div class="panel"><h2 class="c">📋 Cara Bermain</h2><ol class="rules"><li>Pilih kartu soal di sebelah kiri, lalu pilih pasangan kartu jawabannya di sebelah kanan.</li><li>Pasangkan **semua 5 kartu** di setiap level.</li><li>Tekan tombol **“✔ Periksa Jawaban”** untuk melihat hasil nilai dan evaluasimu.</li><li>Kartu berwarna **Hijau (✅)** artinya benar, dan **Merah (❌)** artinya belum tepat.</li><li>Setiap jawaban benar bernilai 10 poin (Maksimal 50 poin per level).</li><li>Kamu bisa lanjut ke level berikutnya atau mengulang level jika ingin memperbaiki nilai!</li></ol>
 <div class="c"><b>Pilih mode bermain:</b></div><div class="mode"><button class="btn w ${S.mode==="ind"?"on":""}" data-act="mode" data-m="ind">🧍 Individu</button><button class="btn w ${S.mode==="grp"?"on":""}" data-act="mode" data-m="grp">👥 Kelompok</button></div>
-${S.mode==="grp"?guide("Diskusikan jawaban bersama teman satu kelompok. Dengarkan pendapat setiap anggota dan sepakati jawaban sebelum memilih kartu."):""}
 <div class="acts"><button class="btn w" data-act="go" data-p="home">⬅ Kembali</button><button class="btn r" data-act="start">🚀 MULAI MISI 1</button></div></div>`}
+
 function game(){
- const L=S.lvl,d=D[L],fin=S.done[L].length===5;
- const qs=d.it.map((x,q)=>{const dn=isDone(q),b=S.bad.q.includes(q);
-  return `<button class="card ${dn?"ok":""} ${S.sel===q&&!dn?"sel":""} ${b?"bad":""} ${S.fresh.includes(q)?"pop":""}" data-act="q" data-i="${q}" ${dn?"disabled":""}><span class="n" style="background:${COL[q]}">${q+1}</span><span class="ic">${x[0]}</span><span>${x[1]}</span></button>`}).join("");
- const as=S.order.map(a=>{const dn=isDone(a),b=S.bad.a.includes(a);let pq=null;for(const k in S.pairs)if(S.pairs[k]===a)pq=+k;
-  return `<button class="card ${dn?"ok":""} ${b?"bad":""} ${S.fresh.includes(a)?"pop":""}" data-act="a" data-i="${a}" ${dn?"disabled":""} style="${pq!=null&&!dn?"border-color:"+COL[pq]:""}">${pq!=null&&!dn?`<span class="pb" style="background:${COL[pq]}">${pq+1}</span>`:""}<span>${d.it[a][2]}</span></button>`}).join("");
+ const L=S.lvl,d=D[L],isRev=S.reviewed[L];
+ const qs=d.it.map((x,q)=>{
+  let cls="";
+  if(isRev) cls=S.results[q]?"ok":"bad";
+  else if(S.sel===q) cls="sel";
+  return `<button class="card ${cls}" data-act="q" data-i="${q}" ${isRev?"disabled":""}><span class="n" style="background:${COL[q]}">${q+1}</span><span class="ic">${x[0]}</span><span>${x[1]}</span></button>`
+ }).join("");
+
+ const as=S.order.map(a=>{
+  let pq=null;for(const k in S.pairs)if(S.pairs[k]===a)pq=+k;
+  let cls="";
+  if(isRev && pq!=null) cls=S.results[pq]?"ok":"bad";
+  return `<button class="card ${cls}" data-act="a" data-i="${a}" ${isRev?"disabled":""} style="${pq!=null&&!isRev?"border-color:"+COL[pq]:""}">${pq!=null?`<span class="pb" style="background:${COL[pq]}">${pq+1}</span>`:""}<span>${d.it[a][2]}</span></button>`
+ }).join("");
+
  return `<div class="banner"><span>Level ${L+1}: ${d.t}</span><span>${d.env}</span></div>${stat()}
-${S.mode==="grp"?guide("Diskusikan jawaban bersama teman satu kelompok. Dengarkan pendapat setiap anggota dan sepakati jawaban sebelum memilih kartu."):""}
-${guide(S.msg||"Pilih kartu soal.",S.kind)}
+${guide(S.msg,S.kind)}
 <div class="grid"><div class="col"><h3>❓ Kartu Soal</h3>${qs}</div><div class="col"><h3>💡 Kartu Jawaban</h3>${as}</div></div>
-${fin?`<div class="panel done c"><span class="big">⭐</span><h2>${M.lv}</h2><p><b>${d.e}</b></p>${L===4?`<p><b>${M.all}</b></p>`:""}</div>`:""}
-<div class="acts"><button class="btn w" data-act="go" data-p="home">⬅ Kembali</button><button class="btn y" data-act="hint" ${fin?"disabled":""}>💡 Petunjuk</button><button class="btn w" data-act="retry">🔄 Coba Lagi</button><button class="btn w" data-act="snd">${MUTE?"🔇":"🔊"} Suara</button>
-${fin?(L<4?`<button class="btn g" data-act="next">Lanjut ke Level Berikutnya ➡</button>`:`<button class="btn g" data-act="result">🏆 Lihat Hasil Akhir</button>`):`<button class="btn r" data-act="check">✔ Periksa Jawaban</button>`}</div>`}
+${isRev?`<div class="panel done c"><h2>Nilai Level ${L+1}: ${S.scores[L]*10} / 50</h2><p><b>${d.e}</b></p></div>`:""}
+<div class="acts"><button class="btn w" data-act="go" data-p="home">⬅ Kembali</button><button class="btn w" data-act="snd">${MUTE?"🔇":"🔊"} Suara</button>
+${isRev?
+  `<button class="btn y" data-act="retry">🔄 Ulangi Level Ini</button>`+
+  (L<4?`<button class="btn g" data-act="next">Lanjut ke Level ${L+2} ➡</button>`:`<button class="btn g" data-act="result">🏆 Lihat Hasil Akhir</button>`)
+  :`<button class="btn r" data-act="check">✔ Periksa Jawaban</button>`
+}</div>`}
+
 function result(){
  const p=score(),cat=p>=220?"Pahlawan Konstitusi Hebat!":p>=170?"Pejuang Hak dan Kewajiban!":"Penjelajah Konstitusi!";
- return `<div class="c"><div class="hero">🎉🧑‍🎓👧🏽👦🏻👧🏿🎉</div><h1>MISI SELESAI!</h1>${guide(M.all,"ok")}
-<div class="panel"><div class="stats"><span class="chip">🏅 Skor ${p} / 250</span><span class="chip">✅ Benar ${solved()} / 25</span><span class="chip">⭐ Bintang ${stars()} / 5</span></div>
-<h2 class="c" style="margin-top:12px">🏆 ${cat}</h2><p class="c">Selamat! Kamu sudah belajar dan berusaha dengan baik. Terus semangat ya!</p>
-${D.map((d,i)=>`<div class="lv"><span>Level ${i+1}: ${d.t}</span><span>${S.done[i].length*10}/50 ${S.done[i].length===5?"⭐":"☆"}</span></div>`).join("")}</div>
+ return `<div class="c"><div class="hero">🎉🧑‍🎓👧🏽👦🏻👧🏿🎉</div><h1>MISI SELESAI!</h1>${guide("Selamat! Kamu sudah menyelesaikan seluruh misi dengan luar biasa!","ok")}
+<div class="panel"><div class="stats"><span class="chip">🏅 Skor Total: ${p} / 250</span><span class="chip">⭐ Bintang: ${stars()} / 5</span></div>
+<h2 class="c" style="margin-top:12px">🏆 ${cat}</h2>
+${D.map((d,i)=>`<div class="lv"><span>Level ${i+1}: ${d.t}</span><span>${S.scores[i]*10}/50 Poin ${S.scores[i]===5?"⭐":"☆"}</span></div>`).join("")}</div>
 <div class="panel" style="text-align:left"><h2>📝 Ringkasan Materi</h2><ol class="rules">${RING.map(r=>`<li>${r}</li>`).join("")}</ol>
 <h3>💭 Refleksi</h3><p><b>Apa satu tindakan bertanggung jawab yang akan kamu lakukan mulai hari ini?</b></p><textarea id="ref" placeholder="Tulis jawabanmu di sini...">${S.reflect}</textarea></div>
-<div class="panel"><h2>📤 Kumpulkan Hasil</h2><p>Tulis namamu, lalu salin hasilnya dan kirim ke gurumu.</p><input id="nm" value="${esc(S.name||"")}" placeholder="Nama kamu" style="width:100%;font:inherit;border:3px solid var(--bd);border-radius:16px;padding:10px;background:var(--card);color:var(--tx)"><div class="acts"><button class="btn y" data-act="copy">📋 Salin Hasil</button>${LINK_KUMPUL?`<a class="btn g" href="${LINK_KUMPUL}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📨 Kirim ke Guru</a>`:""}</div>${S.out?`<p><b>Hasil siap! Jika belum tersalin otomatis, tekan teks di bawah lalu salin.</b></p><textarea readonly onclick="this.select()" style="min-height:170px">${esc(S.out)}</textarea>`:""}</div>
-<div class="acts"><button class="btn r" data-act="again">🔁 Main Lagi</button><button class="btn y" data-act="mat">📚 Pelajari Materi</button></div></div>`}
+<div class="panel"><h2>📤 Kumpulkan Hasil</h2><p>Tulis namamu, lalu salin hasilnya untuk dikirimkan ke guru.</p><input id="nm" value="${esc(S.name||"")}" placeholder="Nama kamu" style="width:100%;font:inherit;border:3px solid var(--bd);border-radius:16px;padding:10px;background:var(--card);color:var(--tx)"><div class="acts"><button class="btn y" data-act="copy">📋 Salin Hasil</button>${LINK_KUMPUL?`<a class="btn g" href="${LINK_KUMPUL}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📨 Kirim ke Guru</a>`:""}</div>${S.out?`<p><b>Hasil siap! Jika belum tersalin otomatis, tekan teks di bawah lalu salin.</b></p><textarea readonly onclick="this.select()" style="min-height:170px">${esc(S.out)}</textarea>`:""}</div>
+<div class="acts"><button class="btn r" data-act="again">🔁 Main Lagi Dari Awal</button><button class="btn y" data-act="mat">📚 Pelajari Materi</button></div></div>`}
+
 function materi(){return `<div class="c"><h1 style="font-size:clamp(28px,6vw,44px)">📚 Pelajari Materi</h1></div>${MAT.map(m=>`<div class="panel info"><div class="ic">${m[0]}</div><div><h3 style="margin:0">${m[1]}</h3><p style="margin:4px 0 0">${m[2]}</p></div></div>`).join("")}
-<div class="acts"><button class="btn w" data-act="go" data-p="${stars()===5?"result":"home"}">⬅ Kembali ${stars()===5?"ke Hasil":""}</button><button class="btn r" data-act="again">🔁 Main Lagi</button></div>`}
+<div class="acts"><button class="btn w" data-act="go" data-p="${S.reviewed[4]?"result":"home"}">⬅ Kembali</button></div>`}
+
 function render(){const P={home,rules,game,result,materi};$.innerHTML=P[S.page]();scrollTo(0,0)}
 function soft(){const y=scrollY;$.innerHTML=game();scrollTo(0,y)}
 
@@ -165,11 +197,10 @@ $.addEventListener("click",e=>{
   case"snd":MUTE=!MUTE;sfx("tick");soft();break;
   case"q":sfx("tick");pickQ(i);soft();break;
   case"a":sfx("tick");pickA(i);soft();break;
-  case"check":check();soft();break;
-  case"hint":hint();soft();break;
+  case"check":checkAll();soft();break;
   case"retry":startLevel(S.lvl);render();break;
-  case"next":if(S.done[S.lvl].length===5){startLevel(S.lvl+1);render()}break;
-  case"result":if(stars()===5){S.page="result";render()}break;
+  case"next":if(S.lvl<4){startLevel(S.lvl+1);render()}break;
+  case"result":S.page="result";render();break;
   case"copy":S.out=hasil();try{navigator.clipboard.writeText(S.out)}catch(x){}softR();break;
   case"mat":S.page="materi";render();break;
   case"again":init(S.mode);S.page="rules";render();break;
